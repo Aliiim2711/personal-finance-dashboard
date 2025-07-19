@@ -341,7 +341,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support & Contact
 
-- **📧 Email**: aleemwadhwaniya.19.ce@iite.indusuni.ac.in
+- **📧 Email**: aleemwadhwaniya01@gmail.com
 - **🐛 Issues**: [GitHub Issues](https://github.com/Aliiim2711/personal-finance-dashboard/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/Aliiim2711/personal-finance-dashboard/discussions)
 
