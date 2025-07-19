@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Represents a connected bank/financial institution
+model PlaidItem {
+  id              String   @id @default(cuid())
+  itemId          String   @unique
+  accessToken     String   // Plaid access token for this institution
+  institutionId   String
+  institutionName String?
+  institutionLogo String?
+  accounts        Account[] // One institution can have multiple accounts
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Individual bank accounts (checking, savings, credit cards, etc.)
+model Account {
+  id        String    @id @default(cuid())
+  plaidId   String    @unique // Plaid's unique identifier for this account
+  name      String    // Account name (e.g., "Chase Checking")
+  type      String    // Account type (depository, credit, loan, investment)
+  subtype   String?   // More specific type (checking, savings, credit card)
+  mask      String?   // Last 4 digits of account number
+  plaidItem PlaidItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId    String
+  balances  AccountBalance[] // Historical balance data
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Historical balance data for each account
+model AccountBalance {
+  id        String   @id @default(cuid())
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+  current   Float    // Current balance
+  available Float?   // Available balance (for checking accounts)
+  limit     Float?   // Credit limit (for credit cards)
+  date      DateTime @default(now())
+
+  @@index([date]) // Index for faster date-based queries
+}
